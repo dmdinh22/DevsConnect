@@ -6,7 +6,7 @@ import TextFieldGroup from '../common/TextFieldGroup';
 import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
 import InputGroup from '../common/InputGroup';
 import SelectListGroup from '../common/SelectListGroup';
-//import { createProfile } from '../../actions/profileActions';
+import { createProfile } from '../../actions/profileActions';
 
 class CreateProfile extends Component {
 	constructor(props) {
@@ -42,6 +42,7 @@ class CreateProfile extends Component {
 	onSubmit(e) {
 		e.preventDefault();
 
+		// create profile obj to send to endpoint
 		const profileData = {
 			handle: this.state.handle,
 			company: this.state.company,
@@ -58,9 +59,8 @@ class CreateProfile extends Component {
 			instagram: this.state.instagram
 		};
 
-		console.log('submit', profileData);
-
-		// this.props.createProfile(profileData, this.props.history);
+		// call endpoint and pass in object and history for redirect
+		this.props.createProfile(profileData, this.props.history);
 	}
 
 	onChange(e) {
@@ -253,4 +253,6 @@ const mapStateToProps = state => ({
 	errors: state.errors
 });
 
-export default connect(mapStateToProps)(CreateProfile);
+export default connect(mapStateToProps, { createProfile })(
+	withRouter(CreateProfile)
+);
