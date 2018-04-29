@@ -192,7 +192,7 @@ class EditProfile extends Component {
 		}
 
 		return (
-			<div className="create-profile">
+			<div className="edit-profile">
 				<div className="container">
 					<div className="row">
 						<div className="col-md-8 m-auto">
