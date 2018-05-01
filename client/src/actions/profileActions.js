@@ -26,7 +26,7 @@ export const getCurrentProfile = () => dispatch => {
 		);
 };
 
-// create Profile
+// create profile
 export const createProfile = (profileData, history) => dispatch => {
 	axios
 		.post('/api/profile', profileData)
