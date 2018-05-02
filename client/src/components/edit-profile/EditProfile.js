@@ -114,7 +114,7 @@ class EditProfile extends Component {
 			youtube: this.state.youtube,
 			instagram: this.state.instagram
 		};
-
+		console.log(profileData);
 		// call endpoint and pass in object and history for redirect
 		this.props.createProfile(profileData, this.props.history);
 	}
