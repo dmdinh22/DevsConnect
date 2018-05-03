@@ -18,6 +18,7 @@ class PostItem extends Component {
 		this.props.removeLike(id);
 	}
 
+	// check if user has already liked the post already
 	findUserLike(likes) {
 		const { auth } = this.props;
 		if (likes.filter(like => like.user === auth.user.id).length > 0) {
