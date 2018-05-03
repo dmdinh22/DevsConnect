@@ -1,20 +1,22 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers';
-import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 
 const initialState = {};
 
 const middleware = [thunk];
 
+// setup for chrome ext - prod only
+let devTools =
+	window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
+if (process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'production') {
+	devTools = a => a;
+}
+
 const store = createStore(
 	rootReducer,
 	initialState,
-	composeWithDevTools(
-		applyMiddleware(...middleware)
-		// setup for chrome ext
-		// window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-	)
+	compose(applyMiddleware(...middleware), devTools)
 );
 
 export default store;

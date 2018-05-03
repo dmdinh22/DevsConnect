@@ -23,7 +23,5 @@
 		"eject": "react-scripts eject"
 	},
 	"proxy": "http://localhost:5000",
-	"devDependencies": {
-		"redux-devtools-extension": "^2.13.2"
-	}
+	"devDependencies": {}
 }
