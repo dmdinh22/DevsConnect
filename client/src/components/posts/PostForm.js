@@ -25,6 +25,7 @@ class PostForm extends Component {
 	onSubmit(e) {
 		e.preventDefault();
 
+		// destruct user from auth state
 		const { user } = this.props.auth;
 
 		const newPost = {
