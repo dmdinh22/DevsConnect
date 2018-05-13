@@ -37,7 +37,7 @@ router.get(
 				}
 				result.json(profile);
 			})
-			.catch(error =>  result.status(404).json(error));
+			.catch(error => result.status(404).json(error));
 	}
 );
 
@@ -57,8 +57,10 @@ router.get('/all', (req, result) => {
 
 			result.json(profiles);
 		})
-		.catch(error => 
-			result.status(404).json({ profile: 'There are no profiles.', error: err })
+		.catch(error =>
+			result
+				.status(404)
+				.json({ profile: 'There are no profiles.', error: error })
 		);
 });
 
@@ -78,10 +80,10 @@ router.get('/handle/:handle', (req, result) => {
 
 			result.json(profile);
 		})
-		.catch(error => 
+		.catch(error =>
 			result
 				.status(404)
-				.json({ profile: 'There is no profile for this user.', error: err })
+				.json({ profile: 'There is no profile for this user.', error: error })
 		);
 });
 
@@ -100,10 +102,10 @@ router.get('/user/:user_id', (req, result) => {
 
 			result.json(profile);
 		})
-		.catch(error => 
+		.catch(error =>
 			result
 				.status(404)
-				.json({ profile: 'There is no profile for this user.', error: err })
+				.json({ profile: 'There is no profile for this user.', error: error })
 		);
 });
 
@@ -167,7 +169,9 @@ router.post(
 					}
 
 					// Save Profile
-					new Profile(profileFields).save().then(profile => result.json(profile));
+					new Profile(profileFields)
+						.save()
+						.then(profile => result.json(profile));
 				});
 			}
 		});
@@ -262,7 +266,7 @@ router.delete(
 				// save
 				profile.save().then(profile => result.json(profile));
 			})
-			.catch(error =>  result.status(404).json(error));
+			.catch(error => result.status(404).json(error));
 	}
 );
 
@@ -286,7 +290,7 @@ router.delete(
 				// save
 				profile.save().then(profile => result.json(profile));
 			})
-			.catch(error =>  result.status(404).json(error));
+			.catch(error => result.status(404).json(error));
 	}
 );
 

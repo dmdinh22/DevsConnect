@@ -46,17 +46,17 @@ router.post('/register', (req, result) => {
 			});
 
 			// hashing pw with bcrypt
-			bcrypt.genSalt(10, (err, salt) => {
-				bcrypt.hash(newUser.password, salt, (err, hash) => {
+			bcrypt.genSalt(10, (error, salt) => {
+				bcrypt.hash(newUser.password, salt, (error, hash) => {
 					if (error) {
-						throw err;
+						throw error;
 					}
 
 					newUser.password = hash;
 					newUser
 						.save()
 						.then(user => result.json(user))
-						.catch(error =>  console.log(error));
+						.catch(error => console.log(error));
 				});
 			});
 		}
@@ -98,7 +98,7 @@ router.post('/login', (req, result) => {
 					payload,
 					keys.secretOrKey,
 					{ expiresIn: 3600 },
-					(err, token) => {
+					(error, token) => {
 						result.json({
 							success: true,
 							token: 'Bearer ' + token
