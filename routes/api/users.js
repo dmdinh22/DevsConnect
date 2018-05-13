@@ -48,7 +48,7 @@ router.post('/register', (req, result) => {
 			// hashing pw with bcrypt
 			bcrypt.genSalt(10, (err, salt) => {
 				bcrypt.hash(newUser.password, salt, (err, hash) => {
-					if (err) {
+					if (error) {
 						throw err;
 					}
 
@@ -56,7 +56,7 @@ router.post('/register', (req, result) => {
 					newUser
 						.save()
 						.then(user => result.json(user))
-						.catch(error =>  console.log(err));
+						.catch(error =>  console.log(error));
 				});
 			});
 		}

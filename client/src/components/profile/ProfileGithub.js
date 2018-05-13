@@ -27,7 +27,7 @@ class ProfileGithub extends Component {
 					this.setState({ repos: data });
 				}
 			})
-			.catch(error =>  console.log(err));
+			.catch(error =>  console.log(error));
 	}
 
 	render() {
