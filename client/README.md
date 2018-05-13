@@ -453,7 +453,7 @@ class App extends Component {
       .then(({ moduleA }) => {
         // Use moduleA
       })
-      .catch(err => {
+      .catch(error =>  {
         // Handle failure
       });
   };
@@ -1952,8 +1952,8 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+app.get('/', function (req, result) {
+  result.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 app.listen(9000);
@@ -1974,9 +1974,9 @@ This is because when there is a fresh page load for a `/todos/42`, the server lo
 ```diff
  app.use(express.static(path.join(__dirname, 'build')));
 
--app.get('/', function (req, res) {
-+app.get('/*', function (req, res) {
-   res.sendFile(path.join(__dirname, 'build', 'index.html'));
+-app.get('/', function (req, result) {
++app.get('/*', function (req, result) {
+   result.sendFile(path.join(__dirname, 'build', 'index.html'));
  });
 ```
 

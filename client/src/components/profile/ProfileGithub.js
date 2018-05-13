@@ -21,13 +21,13 @@ class ProfileGithub extends Component {
 		fetch(
 			`https://api.github.com/users/${username}/repos?per_page=${count}&sort=${sort}&client_id=${clientId}&client_secret=${clientSecret}`
 		)
-			.then(res => res.json())
+			.then(result => result.json())
 			.then(data => {
 				if (this.refs.gitRef) {
 					this.setState({ repos: data });
 				}
 			})
-			.catch(err => console.log(err));
+			.catch(error =>  console.log(err));
 	}
 
 	render() {

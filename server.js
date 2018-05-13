@@ -21,7 +21,7 @@ const db = require('./config/keys').mongoURI;
 mongoose
 	.connect(db)
 	.then(() => console.log('MongoDB connected.'))
-	.catch(err => console.log(err));
+	.catch(error =>  console.log(err));
 
 // passport middleware
 app.use(passport.initialize());
@@ -39,8 +39,8 @@ if (process.env.NODE_ENV === 'production') {
 	// set static folder
 	app.use(express.static('client/build'));
 
-	app.get('*', (req, res) => {
-		res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+	app.get('*', (req, result) => {
+		result.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
 	});
 }
 

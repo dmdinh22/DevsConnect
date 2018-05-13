@@ -16,22 +16,22 @@ const User = require('../../models/User');
 // @route   GET api/users/test
 // @desc    Tests users route
 // @access  Public
-router.get('/test', (req, res) => res.json({ msg: 'Users works' }));
+router.get('/test', (req, result) => result.json({ msg: 'Users works' }));
 
 // @route   POST api/users/register
 // @desc    Register user
 // @access  Public
-router.post('/register', (req, res) => {
+router.post('/register', (req, result) => {
 	const { errors, isValid } = validateRegisterInput(req.body);
 
 	// check validation
 	if (!isValid) {
-		return res.status(400).json(errors);
+		return result.status(400).json(errors);
 	}
 	User.findOne({ email: req.body.email }).then(user => {
 		if (user) {
 			errors.email = 'Email already exists.';
-			return res.status(400).json(errors);
+			return result.status(400).json(errors);
 		} else {
 			const avatar = gravatar.url(req.body.email, {
 				s: '200', //size
@@ -55,8 +55,8 @@ router.post('/register', (req, res) => {
 					newUser.password = hash;
 					newUser
 						.save()
-						.then(user => res.json(user))
-						.catch(err => console.log(err));
+						.then(user => result.json(user))
+						.catch(error =>  console.log(err));
 				});
 			});
 		}
@@ -66,12 +66,12 @@ router.post('/register', (req, res) => {
 // @route   POST api/users/login
 // @desc    log in user/ return jwt token
 // @access  Public
-router.post('/login', (req, res) => {
+router.post('/login', (req, result) => {
 	const { errors, isValid } = validateLoginInput(req.body);
 
 	// check validation
 	if (!isValid) {
-		return res.status(400).json(errors);
+		return result.status(400).json(errors);
 	}
 	const email = req.body.email;
 	const password = req.body.password;
@@ -81,7 +81,7 @@ router.post('/login', (req, res) => {
 		// check for user
 		if (!user) {
 			errors.email = 'User not found';
-			return res.status(404).json(errors);
+			return result.status(404).json(errors);
 		}
 
 		// check pw
@@ -99,7 +99,7 @@ router.post('/login', (req, res) => {
 					keys.secretOrKey,
 					{ expiresIn: 3600 },
 					(err, token) => {
-						res.json({
+						result.json({
 							success: true,
 							token: 'Bearer ' + token
 						});
@@ -107,7 +107,7 @@ router.post('/login', (req, res) => {
 				);
 			} else {
 				errors.password = 'Password incorrect';
-				return res.status(400).json(errors);
+				return result.status(400).json(errors);
 			}
 		});
 	});
@@ -119,8 +119,8 @@ router.post('/login', (req, res) => {
 router.get(
 	'/current',
 	passport.authenticate('jwt', { session: false }),
-	(req, res) => {
-		res.json({
+	(req, result) => {
+		result.json({
 			id: req.user.id,
 			name: req.user.name,
 			email: req.user.email

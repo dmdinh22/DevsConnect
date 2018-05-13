@@ -14,28 +14,28 @@ const validatePostInput = require('../../validation/post');
 // @route   GET api/posts/test
 // @desc    Tests post route
 // @access  Public
-router.get('/test', (req, res) => res.json({ msg: 'Posts works' }));
+router.get('/test', (req, result) => result.json({ msg: 'Posts works' }));
 
 // @route   GET api/posts
 // @desc    Get posts
 // @access  Public
-router.get('/', (req, res) => {
+router.get('/', (req, result) => {
 	Post.find()
 		.sort({ date: -1 })
-		.then(posts => res.json(posts))
-		.catch(err =>
-			res.status(404).json({ nopostfound: 'No post found with that id.' })
+		.then(posts => result.json(posts))
+		.catch(error => 
+			result.status(404).json({ nopostfound: 'No post found with that id.' })
 		);
 });
 
 // @route   GET api/posts/:id
 // @desc    Get post by id
 // @access  Public
-router.get('/:id', (req, res) => {
+router.get('/:id', (req, result) => {
 	Post.findById(req.params.id)
-		.then(post => res.json(post))
-		.catch(err =>
-			res.status(404).json({ nopostfound: 'No post found with that id.' })
+		.then(post => result.json(post))
+		.catch(error => 
+			result.status(404).json({ nopostfound: 'No post found with that id.' })
 		);
 });
 
@@ -45,13 +45,13 @@ router.get('/:id', (req, res) => {
 router.post(
 	'/',
 	passport.authenticate('jwt', { session: false }),
-	(req, res) => {
+	(req, result) => {
 		const { errors, isValid } = validatePostInput(req.body);
 
 		// check validation
 		if (!isValid) {
 			// if any errors, send 400 with error object
-			return res.status(400).json(errors);
+			return result.status(400).json(errors);
 		}
 
 		const newPost = new Post({
@@ -61,7 +61,7 @@ router.post(
 			user: req.user.id
 		});
 
-		newPost.save().then(post => res.json(post));
+		newPost.save().then(post => result.json(post));
 	}
 );
 
@@ -71,21 +71,21 @@ router.post(
 router.delete(
 	'/:id',
 	passport.authenticate('jwt', { session: false }),
-	(req, res) => {
+	(req, result) => {
 		Profile.findOne({ user: req.user.id }).then(profile => {
 			Post.findById(req.params.id)
 				.then(post => {
 					// check for post owner
 					if (post.user.toString() != req.user.id) {
-						return res
+						return result
 							.status(401)
 							.json({ notauthorized: 'User not authorized.' });
 					}
 
 					// delete
-					post.remove().then(() => res.json({ success: true }));
+					post.remove().then(() => result.json({ success: true }));
 				})
-				.catch(err => res.status(404).json({ postnotfound: 'No post found.' }));
+				.catch(error =>  result.status(404).json({ postnotfound: 'No post found.' }));
 		});
 	}
 );
@@ -96,7 +96,7 @@ router.delete(
 router.post(
 	'/like/:id',
 	passport.authenticate('jwt', { session: false }),
-	(req, res) => {
+	(req, result) => {
 		Profile.findOne({ user: req.user.id }).then(profile => {
 			Post.findById(req.params.id)
 				.then(post => {
@@ -104,7 +104,7 @@ router.post(
 						post.likes.filter(like => like.user.toString() === req.user.id)
 							.length > 0
 					) {
-						return res
+						return result
 							.status(400)
 							.json({ alreadliked: 'User already liked this post.' });
 					}
@@ -112,9 +112,9 @@ router.post(
 					// add user id to likes array
 					post.likes.unshift({ user: req.user.id });
 
-					post.save().then(post => res.json(post));
+					post.save().then(post => result.json(post));
 				})
-				.catch(err => res.status(404).json({ postnotfound: 'No post found.' }));
+				.catch(error =>  result.status(404).json({ postnotfound: 'No post found.' }));
 		});
 	}
 );
@@ -125,7 +125,7 @@ router.post(
 router.post(
 	'/unlike/:id',
 	passport.authenticate('jwt', { session: false }),
-	(req, res) => {
+	(req, result) => {
 		Profile.findOne({ user: req.user.id }).then(profile => {
 			Post.findById(req.params.id)
 				.then(post => {
@@ -133,7 +133,7 @@ router.post(
 						post.likes.filter(like => like.user.toString() === req.user.id)
 							.length == 0
 					) {
-						return res
+						return result
 							.status(400)
 							.json({ notliked: 'You have not yet liked this post' });
 					}
@@ -147,9 +147,9 @@ router.post(
 					post.likes.splice(removeIndex, 1);
 
 					// save to db
-					post.save().then(post => res.json(post));
+					post.save().then(post => result.json(post));
 				})
-				.catch(err => res.status(404).json({ postnotfound: 'No post found.' }));
+				.catch(error =>  result.status(404).json({ postnotfound: 'No post found.' }));
 		});
 	}
 );
@@ -160,13 +160,13 @@ router.post(
 router.post(
 	'/comment/:id',
 	passport.authenticate('jwt', { session: false }),
-	(req, res) => {
+	(req, result) => {
 		const { errors, isValid } = validatePostInput(req.body);
 
 		// check validation
 		if (!isValid) {
 			// if any errors, send 400 with error object
-			return res.status(400).json(errors);
+			return result.status(400).json(errors);
 		}
 
 		Post.findById(req.params.id)
@@ -182,9 +182,9 @@ router.post(
 				post.comments.unshift(newComment);
 
 				// save
-				post.save().then(post => res.json(post));
+				post.save().then(post => result.json(post));
 			})
-			.catch(err => res.status(404).json({ postnotfound: 'No post found.' }));
+			.catch(error =>  result.status(404).json({ postnotfound: 'No post found.' }));
 	}
 );
 
@@ -194,7 +194,7 @@ router.post(
 router.delete(
 	'/comment/:id/:comment_id',
 	passport.authenticate('jwt', { session: false }),
-	(req, res) => {
+	(req, result) => {
 		Post.findById(req.params.id)
 			.then(post => {
 				// check to see if comment exists
@@ -203,7 +203,7 @@ router.delete(
 						comment => comment._id.toString() === req.params.comment_id
 					).length === 0
 				) {
-					return res
+					return result
 						.status(404)
 						.json({ commentnotexists: 'Comment does not exist' });
 				}
@@ -217,9 +217,9 @@ router.delete(
 				post.comments.splice(removeIndex, 1);
 
 				// save to db
-				post.save().then(post => res.json(post));
+				post.save().then(post => result.json(post));
 			})
-			.catch(err => res.status(404).json({ postnotfound: 'No post found.' }));
+			.catch(error =>  result.status(404).json({ postnotfound: 'No post found.' }));
 	}
 );
 
