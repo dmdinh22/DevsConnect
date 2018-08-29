@@ -30,12 +30,16 @@ class Register extends Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.errors) {
-			this.setState({ errors: nextProps.errors });
+			this.setState({
+				errors: nextProps.errors
+			});
 		}
 	}
 
 	onChange(e) {
-		this.setState({ [e.target.name]: e.target.value });
+		this.setState({
+			[e.target.name]: e.target.value
+		});
 	}
 
 	onSubmit(e) {
@@ -61,10 +65,10 @@ class Register extends Component {
 				<div className="container">
 					<div className="row">
 						<div className="col-md-8 m-auto">
-							<h1 className="display-4 text-center">Sign Up</h1>
+							<h1 className="display-4 text-center"> Sign Up </h1>{' '}
 							<p className="lead text-center">
-								Create your DevsConnect account
-							</p>
+								Create your DevsConnect account{' '}
+							</p>{' '}
 							<form onSubmit={this.onSubmit} noValidate>
 								<TextFieldGroup
 									placeholder="Name"
@@ -72,7 +76,7 @@ class Register extends Component {
 									value={this.state.name}
 									onChange={this.onChange}
 									error={errors.name}
-								/>
+								/>{' '}
 								<TextFieldGroup
 									placeholder="Email Address"
 									name="email"
@@ -89,7 +93,7 @@ class Register extends Component {
 									value={this.state.password}
 									onChange={this.onChange}
 									error={errors.password}
-								/>
+								/>{' '}
 								<TextFieldGroup
 									placeholder="Confirm password"
 									name="password2"
@@ -97,12 +101,12 @@ class Register extends Component {
 									value={this.state.password2}
 									onChange={this.onChange}
 									error={errors.password2}
-								/>
+								/>{' '}
 								<input type="submit" className="btn btn-info btn-block mt-4" />
-							</form>
-						</div>
-					</div>
-				</div>
+							</form>{' '}
+						</div>{' '}
+					</div>{' '}
+				</div>{' '}
 			</div>
 		);
 	}
@@ -120,4 +124,9 @@ const mapStateToProps = state => ({
 	errors: state.errors
 });
 
-export default connect(mapStateToProps, { registerUser })(withRouter(Register));
+export default connect(
+	mapStateToProps,
+	{
+		registerUser
+	}
+)(withRouter(Register));
