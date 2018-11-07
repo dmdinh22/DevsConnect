@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 const PrivateRoute = ({ component: Component, auth, ...rest }) => (
 	<Route
+		//https://tylermcginnis.com/react-router-protected-routes-authentication/
 		{...rest}
 		render={props =>
 			auth.isAuthenticated === true ? (
